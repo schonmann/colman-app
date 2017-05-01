@@ -1,0 +1,60 @@
+<template>
+  <div id="collection">
+    <div class="jumbotron light-primary-color ">
+      <label v-if="items.empty()" v-translate>EMPTY_COLLECTION</label>
+      <item v-else v-for="i,idx in items" :me="i"></item>
+    </div>
+  </div>
+</template>
+
+<script>
+  import Item from './Item.vue'
+  export default {
+    components: { Item },
+    name: 'collection',
+    data() {
+		return {
+				items: []
+		};
+    },
+    methods: {
+		showAddModal: function () {
+			//...
+		},
+      /*Ajax Web API service to get collection items.*/
+		populateItemList: function () {
+			var context = this;
+			Http.get('getAllItems', function (items) {
+					if (items.any()) context.items = items;
+			});
+		},
+      /*When user hit the gray area, the interface
+      will pop-up a item add modal. This setups click
+      listener by class.*/
+		prepareGrayAreaClickListeners: function () {
+			var triggerClass = 'jumbotron';
+			$('.' + triggerClass).click(function (e) {
+					if (e.toElement.className.includes(triggerClass))
+							$('#addItemModal').modal('show');
+			});
+		}
+    },
+    mounted() {
+		this.populateItemList();
+		this.prepareGrayAreaClickListeners();
+    }
+  }
+</script>
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style lang="sass" scoped>
+  h1
+    color: #42b983
+  .jumbotron
+    text-align: center
+    border-bottom: .05rem solid #e5e5e5
+  .jumbotron .btn
+    padding: .75rem 1.5rem
+    font-size: 1.5rem
+  label
+    color: gray
+</style>
