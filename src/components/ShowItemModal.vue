@@ -1,6 +1,16 @@
 <template>
     <div>
-        <modal v-if="s" @close="hide"></modal>
+        <modal v-if="s" @close="hide">
+            <label slot="header">
+            Informações - {{item.name}}
+            </label>
+            <label slot="body">
+            asdasdasdasdlt
+            </label>
+            <label slot="footer">
+            asdasdasdasdasdasdsadasd
+            </label>
+        </modal>
     </div>
 </template>
 
@@ -12,11 +22,20 @@ export default {
     data() {
         return {
             s: false,
-            item: {},
+            item: {
+                name: "",
+                description: "",
+            },
         }
     },
     'methods': {
-        show: function(){ this.s = true; },
+        show: function(item){ 
+            this.item.id = item.id;
+            this.item.name = item.name;
+            this.item.description = item.description;
+            //Show modal.
+            this.s = true; 
+        },
         hide: function(){ this.s = false;},
         addItem: function() { 
             $emit('insertItem', item) && this.hide(); 

@@ -38,7 +38,39 @@ import AddItemModal from './components/AddItemModal'
 import ShowItemModal from './components/ShowItemModal'
 
 export default {
-  components: { Collection, AddItemModal, ShowItemModal }
+	'components': { Collection, AddItemModal, ShowItemModal },
+	'methods': {
+		getTypeList: function (callback,fallback) {
+			Http.get("getTypes_" + Config.LANGUAGE, (types) => {
+				callback(types);
+			}, fallback);
+		},
+		getPlaceList: function (callback,fallback) {
+			Http.get("getPlaces", (places) => {
+				callback(places);
+			}, fallback);
+		},
+		getDataPackage: function(callback,fallback) {
+			var DataPackage = {};
+			this.getTypeList((types)=>{
+				this.getPlaceList((places)=>{
+					var dto = {};
+					dto.types = types;
+					dto.places = places;
+					callback(dto);
+				}, fallback);
+			},fallback);
+		},
+		//Behavior on failure to get data package.
+		onAjaxFailure: function(x,s,e) {
+			alert("Error: " + s);
+		},
+  	},
+	mounted() {
+		this.getDataPackage((dto)=>{
+			window.DataPackage = dto;
+		}, this.onAjaxFailure);
+	}
 }
 </script>
 

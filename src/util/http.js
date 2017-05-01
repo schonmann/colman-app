@@ -9,8 +9,8 @@ Http.post = function (service, data, callback, fallback) {
         success: function (res) {
             typeof (callback) === 'function' && callback(res);
         },
-        error: function (XMLHttpRequest, status, error) {
-            typeof (fallback) === 'function' && fallback(error);
+        error: function (x, status, error) {
+            typeof (fallback) === 'function' && fallback(XMLHttpRequest,status,error);
         }
     });
 };
@@ -22,8 +22,8 @@ Http.get = function (service, callback, fallback) {
         success: function (res) {
             typeof (callback) === 'function' && callback(res);
         },
-        error: function (XMLHttpRequest, status, error) {
-            typeof (fallback) === 'function' && fallback(error);
+        error: function (x, status, error) {
+            typeof (fallback) === 'function' && fallback(x,status,error);
         }
     });
 };
