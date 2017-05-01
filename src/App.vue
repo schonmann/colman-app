@@ -8,8 +8,8 @@
           <i class="fa fa-chevron-right secondary-text-color"></i>
         </h3>
         <div class="row" style="display:inline-block;float:right;">
-          <button class="btn btn-default btn-xs" @click="$translate.setLang('en')">EN</button>
-          <button class="btn btn-default btn-xs" @click="$translate.setLang('pt')">PT</button>
+          <button class="btn btn-default btn-xs" @click="$translate.setLang('en');">EN</button>
+          <button class="btn btn-default btn-xs" @click="$translate.setLang('pt');">PT</button>
         </div>
       </div>
       <collection></collection>
@@ -41,7 +41,7 @@ export default {
 	'components': { Collection, AddItemModal, ShowItemModal },
 	'methods': {
 		getTypeList: function (callback,fallback) {
-			Http.get("getTypes_" + Config.LANGUAGE, (types) => {
+			Http.get("getTypes", (types) => {
 				callback(types);
 			}, fallback);
 		},
@@ -61,15 +61,18 @@ export default {
 				}, fallback);
 			},fallback);
 		},
+		doAjax: function(){
+			this.getDataPackage((dto)=>{
+				window.DataPackage = dto;
+			}, this.onAjaxFailure);
+		},
 		//Behavior on failure to get data package.
 		onAjaxFailure: function(x,s,e) {
 			alert("Error: " + s);
-		},
+		}
   	},
 	mounted() {
-		this.getDataPackage((dto)=>{
-			window.DataPackage = dto;
-		}, this.onAjaxFailure);
+		this.doAjax();
 	}
 }
 </script>

@@ -18,7 +18,11 @@ require('bootstrap-sass')
 
 // ======================= Utils ===============================
 require('./util/arrayutils.js')
-require('./util/util.js')
+window.Util = require('./util/util.js')
+// ======================= models ===============================
+window.Item = require('./model/item.js')
+window.Person = require('./model/person.js')
+window.Place = require('./model/place.js')
 // ===================== Basic imports =========================
 import Locales from './util/locale.js'
 import Config from './util/config.js'
@@ -38,4 +42,4 @@ new Vue({
   mounted() {
     this.$translate.setLang(Config.LANGUAGE);
   }
-})
+});

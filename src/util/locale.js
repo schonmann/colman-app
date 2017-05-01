@@ -18,6 +18,9 @@ module.exports = {
         'CLOSE': "Close",
         'ITEM_INFO': "Item Info",
         'DELETE_ITEM': "Delete Item",
+        'BOOK': "Book",
+        'CD': "CD",
+        'DVD': "DVD",
     },
     'pt': {
         'APP_TITLE': "Gerenciador de Coleção",
@@ -37,6 +40,9 @@ module.exports = {
         'ADD': "Adicionar",
         'close': "Fechar",
         'ITEM_INFO': "Informações do Item",
-        'DELETE_ITEM': "Apagar Item"
+        'DELETE_ITEM': "Apagar Item",
+        'BOOK': "Livro",
+        'CD': "CD",
+        'DVD': "DVD",
     },
 };

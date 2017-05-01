@@ -6,44 +6,49 @@
     </div>
   </div>
 </template>
-
 <script>
-  import Item from './Item.vue'
-  export default {
-    components: { Item },
-    name: 'collection',
-    data() {
+import Item from './Item.vue'
+export default {
+	components: { Item },
+	name: 'collection',
+	data() {
 		return {
 			items: [] 
 		}
-    },
-    methods: {
-		showAddModal: function (s) {
-			modalAddItem.show();
+	},
+	methods: {
+		addItemToCollection: function () {
+			modalAddItem.show((item)=>{
+				Http.post('insertItem', item, (ok)=>{
+					this.items.push(item);
+				}, (x,s,e)=>{
+					alert("Error: " + s);
+				});
+			});
 		},
-      /*Ajax Web API service to get collection items.*/
+	/*Ajax Web API service to get collection items.*/
 		populateItemList: function () {
 			var context = this;
 			Http.get('getAllItems', function (items) {
-					if (items.any()) context.items = items;
+				if (items.any()) context.items = items;
 			});
 		},
-      /*When user hit the gray area, the interface
-      will pop-up a item add modal. This setups click
-      listener by class.*/
+	/*When user hit the gray area, the interface
+	will pop-up a item add modal. This setups click
+	listener by class.*/
 		prepareGrayAreaClickListeners: function () {
 			var triggerClass = 'jumbotron'; var me = this;
 			$('.' + triggerClass).click(function (e) {
 				if (e.toElement.className.includes(triggerClass))
-					me.showAddModal();
+					me.addItemToCollection();
 			});
 		}
-    },
-    mounted() {
+	},
+	mounted() {
 		this.populateItemList();
 		this.prepareGrayAreaClickListeners();
-    }
-  }
+	}
+}
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="sass" scoped>

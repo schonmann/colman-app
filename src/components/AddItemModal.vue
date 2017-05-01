@@ -16,8 +16,8 @@
                         <div class="form-group">
                             <label v-translate>TYPE</label>
                             <select class="form-control" v-model="item.type">
-                            <option disabled value=""><span v-translate>SELECT_ONE</span></option>
-                            <option v-for="type,idx in typeList" v-bind:value="idx">{{type}}</option>
+                            <option disabled><span v-translate>SELECT_ONE</span></option>
+                            <option v-for="type,idx in types" v-bind:value="idx"><span v-translate>{{type}}</span></option>
                             </select>
                         </div>
                     </div>
@@ -25,9 +25,9 @@
                         <div class="form-group">
                             <label v-translate>PLACE</label>
                             <select class="form-control" v-model="item.place_id">
-                            <option disabled value=""><span v-translate>SELECT_ONE</span></option>
+                            <option disabled><span v-translate>SELECT_ONE</span></option>
                             <option>N/A</option>
-                            <option v-for="p in placeList" v-bind:value="p.id">{{p.name}}</option>
+                            <option v-for="p in places" v-bind:value="p.id">{{p.name}}</option>
                             </select>
                         </div>
                     </div>
@@ -39,7 +39,7 @@
             </div>
             </label>
             <div slot="footer">
-                <button class="btn light-primary-color" @click="hide"><span v-translate>ADD</span></button>
+                <button class="btn light-primary-color" @click="add"><span v-translate>ADD</span></button>
                 <button class="btn light-primary-color" @click="hide"><span v-translate>CLOSE</span></button>
             </div>
         </modal>
@@ -55,13 +55,22 @@ export default {
         return {
             s: false,
             item: {},
+            types: [],
+            places: [],
         }
     },
     'methods': {
-        show: function(){ this.s = true; },
+        show: function(callback){ 
+            this.s = true; 
+            this.callback = callback; //Callback function to return fresh new item.
+            this.types = DataPackage.types;
+            this.places = DataPackage.places;
+            this.item = new Item();
+        },
         hide: function(){ this.s = false;},
-        addItem: function() { 
-            $emit('insertItem', item) && this.hide(); 
+        add: function() { 
+            this.callback(this.item);
+            this.hide();
         }
     },
     mounted() {
@@ -69,3 +78,9 @@ export default {
     }
 }
 </script>
+
+<style lang="css">
+textarea {
+    max-width: 100%;
+}
+</style>

@@ -5,8 +5,7 @@ var port = "58438";
 var rest = {
     'getAllItems': 'api/item/all',
     'insertItem': 'api/item/insert',
-    'getTypes_pt': 'api/info/types/pt-br',
-    'getTypes_en': 'api/info/types/en-us',
+    'getTypes': 'api/info/types/all',
     'getPlaces': "api/place/all"
 };
 Rest.url = function(service){
