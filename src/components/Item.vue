@@ -13,6 +13,9 @@
     name: "item",
     props: {
         me: {type: Object}
+    },
+    methods: {
+        showItemInfoModal: function(){}
     }
   }
 </script>

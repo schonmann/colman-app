@@ -27,14 +27,18 @@
         <p>Developed by Antonio C. Schönmann Alves</p>
       </div>
     </div>
+	  <add-item-modal></add-item-modal>
+    <show-item-modal></show-item-modal>
   </div>
 </template>
 
 <script>
 import Collection from './components/Collection'
+import AddItemModal from './components/AddItemModal'
+import ShowItemModal from './components/ShowItemModal'
 
 export default {
-  components: { Collection }
+  components: { Collection, AddItemModal, ShowItemModal }
 }
 </script>
 

@@ -14,12 +14,12 @@
     name: 'collection',
     data() {
 		return {
-				items: []
-		};
+			items: [] 
+		}
     },
     methods: {
-		showAddModal: function () {
-			//...
+		showAddModal: function (s) {
+			modalAddItem.show();
 		},
       /*Ajax Web API service to get collection items.*/
 		populateItemList: function () {
@@ -32,10 +32,10 @@
       will pop-up a item add modal. This setups click
       listener by class.*/
 		prepareGrayAreaClickListeners: function () {
-			var triggerClass = 'jumbotron';
+			var triggerClass = 'jumbotron'; var me = this;
 			$('.' + triggerClass).click(function (e) {
-					if (e.toElement.className.includes(triggerClass))
-							$('#addItemModal').modal('show');
+				if (e.toElement.className.includes(triggerClass))
+					me.showAddModal();
 			});
 		}
     },
