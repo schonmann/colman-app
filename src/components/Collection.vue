@@ -2,7 +2,7 @@
   <div id="collection">
     <div class="jumbotron light-primary-color ">
       <label v-if="items.empty()" v-translate>EMPTY_COLLECTION</label>
-      <item v-else v-for="i,idx in items" :me="i"></item>
+      	<item v-else v-for="i,idx in items" :me="i" @click.native="showItem(i,idx)" ></item>
     </div>
   </div>
 </template>
@@ -21,6 +21,15 @@ export default {
 			modalAddItem.show((item)=>{
 				Http.post('insertItem', item, (ok)=>{
 					this.items.push(item);
+				}, (x,s,e)=>{
+					alert("Error: " + s);
+				});
+			});
+		},
+		showItem: function (item,index) {
+			modalShowItem.show((item)=>{
+				Http.post('deleteItem', item, (ok)=>{
+					this.items.removeAt(index);
 				}, (x,s,e)=>{
 					alert("Error: " + s);
 				});

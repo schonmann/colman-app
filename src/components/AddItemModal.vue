@@ -39,7 +39,7 @@
             </div>
             </label>
             <div slot="footer">
-                <button class="btn light-primary-color" @click="add"><span v-translate>ADD</span></button>
+                <button class="btn btn-success" @click="add"><span v-translate>ADD</span></button>
                 <button class="btn light-primary-color" @click="hide"><span v-translate>CLOSE</span></button>
             </div>
         </modal>
