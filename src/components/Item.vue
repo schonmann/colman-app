@@ -3,7 +3,7 @@
     <div class="item card">
       <label class="item-label">{{me.name}}</label>
       <div class="divider"></div>
-      <img class="item-image"></img>
+      <img src="../assets/no-image-icon-6.png" class="item-image"></img>
     </div>
   </div>
 </template>
@@ -53,9 +53,11 @@
     }
 }
 .item-image{
-    background-image: url("https://blog.stylingandroid.com/wp-content/themes/lontano-pro/images/no-image-slide.png") no-repeat center center fixed;
     max-width:100%;
     height:auto;
+    max-height:100%;
+    width:100%;
+    object-fit:contain;
 }
 .item-label{
     width:150px;

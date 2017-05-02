@@ -47,21 +47,26 @@ export default {
         return {
             s: false,
             itemDTO: new Item(),
+            item: {}
         }
     },
     'methods': {
-        show: function(it){
-            this.itemDTO.id = it.id;
-            this.itemDTO.name = it.name;
-            this.itemDTO.type = DataPackage.types[it.type];
-            this.itemDTO.place = DataPackage.places.first(p=>p.id===it.place_id);
-            this.itemDTO.description = it.description;
+        show: function(item, callback){
+            this.callback = callback;
+            this.item = item;
+            //Build DTO to display data properly.
+            this.itemDTO.id = item.id;
+            this.itemDTO.name = item.name;
+            this.itemDTO.type = DataPackage.types[item.type];
+            this.itemDTO.place = DataPackage.places.first(p=>p.id===item.place_id);
+            this.itemDTO.description = item.description;
             //Show modal.
             this.s = true; 
         },
         hide: function(){ this.s = false;},
-        del: function() { 
-            $emit('insertItem', item) && this.hide(); 
+        del: function() {
+            this.callback(this.item);
+            this.hide();
         }
     },
     mounted() {
