@@ -99,4 +99,12 @@ export default {
     -webkit-transform: scale(1.1);
     transform: scale(1.1);
 }
+.form-title{
+    display:block;
+    color:gray;
+}
+.form-field {
+    color:gray;
+    word-break: keep-all;
+}
 </style>

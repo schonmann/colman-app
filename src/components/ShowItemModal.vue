@@ -76,7 +76,7 @@ export default {
     color:gray;
 }
 .form-field {
-    color:gray;
-    word-break: keep-all;
+    color: gray;
+    word-break: break-all;
 }
 </style>
