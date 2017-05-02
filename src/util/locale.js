@@ -24,6 +24,9 @@ module.exports = {
         'DVD': "DVD",
         'ORDER_BY': "Order By:",
         'STATUS': "Status",
+        'LOANED': "Loaned",
+        'NOT_LOANED': "Not Loaned",
+        'ALL': "All",
     },
     'pt': {
         'APP_TITLE': "Gerenciador de Coleção",
@@ -50,5 +53,8 @@ module.exports = {
         'DVD': "DVD",
         'ORDER_BY': 'Ordenar por:',
         'STATUS': "Status",
+        'LOANED': "Emprestado",
+        'NOT_LOANED': "Não Emprestado",
+        'ALL': "Todos",
     },
 };

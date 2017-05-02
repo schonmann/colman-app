@@ -11,6 +11,11 @@ Array.prototype.insert = function (index, item) {
     this.splice(index, 1, item);
 };
 
+Array.prototype.popClear = function() {
+    while(this.length > 0)
+        this.pop();
+}
+
 Array.prototype.clear = function () {
     this.length = 0;
 };
@@ -241,6 +246,11 @@ Array.prototype.distinct = function (key) {
     return list;
 };
 
+Array.prototype.replace = function(anotherArr) {
+    var arr = this;
+    arr.popClear();
+    anotherArr.each(i=>arr.push(i));
+};
 
 Array.prototype.asyncEach = function (callback,done) {
     var current = 0;

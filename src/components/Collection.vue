@@ -17,6 +17,14 @@ export default {
 			items: [] 
 		}
 	},
+	props: {
+		filtered: {type: Array}
+	},
+	watch: {
+		filtered: function(filteredItems) {
+			this.items.replace(filteredItems);
+		}
+	},
 	methods: {
 		addItemToCollection: function () {
 			modalAddItem.show((item)=>{
@@ -36,13 +44,6 @@ export default {
 				});
 			});
 		},
-	/*Ajax Web API service to get collection items.*/
-		populateItemList: function () {
-			var context = this;
-			Http.get('getAllItems', function (items) {
-				if (items.any()) context.items = items;
-			});
-		},
 	/*When user hit the gray area, the interface
 	will pop-up a item add modal. This setups click
 	listener by class.*/
@@ -55,7 +56,6 @@ export default {
 		}
 	},
 	mounted() {
-		this.populateItemList();
 		this.prepareGrayAreaClickListeners();
 	}
 }

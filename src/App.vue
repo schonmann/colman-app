@@ -20,21 +20,24 @@
 				</div>
 				<div class="row">
 					<div class="col-lg-3">
-						<select class="form-control" @change="">
+						<select class="form-control" v-on:change="orderBy">
 							<option disabled><span v-translate>SELECT_ONE</span></option>
+							<option value="name" v-translate>NAME</option>
+							<option value="description" v-translate>DESCRIPTION</option>
+							<option value="type" v-translate>TYPE</option>
+						</select>
+					</div>
+					<div class="col-lg-3">
+						<select class="form-control" @change="">
+							<option value="-1"><span v-translate>ALL</span></option>
 							<option v-for="type,idx in types" v-bind:value="idx"><span v-translate>{{type}}</span></option>
 						</select>
 					</div>
 					<div class="col-lg-3">
 						<select class="form-control" @change="">
 							<option disabled><span v-translate>SELECT_ONE</span></option>
-							<option v-for="type,idx in types" v-bind:value="idx"><span v-translate>{{type}}</span></option>
-						</select>
-					</div>
-					<div class="col-lg-3">
-						<select class="form-control" @change="">
-							<option disabled><span v-translate>SELECT_ONE</span></option>
-							<option v-for="type,idx in types" v-bind:value="idx"><span v-translate>{{type}}</span></option>
+							<option value="loaned" v-translate>LOANED</option>
+							<option value="notLoaned" v-translate>NOT_LOANED</option>
 						</select>
 					</div>
 					<div class="col-lg-3">
@@ -48,7 +51,7 @@
 					</div>
 				</div>
 			</div>
-			<collection></collection>
+			<collection :filtered="items"></collection>
 			<div class="row marketing">
 				<div class="col-lg-6">
 					<h4 class="primary-text-color" v-translate>ADD_ITEMS_TO_COLLECTION</h4>
@@ -70,6 +73,7 @@
 </template>
 
 <script>
+
 import Collection from './components/Collection'
 import AddItemModal from './components/AddItemModal'
 import ShowItemModal from './components/ShowItemModal'
@@ -77,7 +81,18 @@ import AddPlaceModal from './components/AddPlaceModal'
 
 export default {
 	'components': { Collection, AddItemModal, ShowItemModal, AddPlaceModal },
+	'data': function(){
+		return {
+			types: [],
+			places: [],
+			items: [],
+		}	
+	},
 	'methods': {
+		orderBy: function(e) {
+			var field = e.srcElement.value;
+			this.items.sort((a,b) => a[field] > b[field]);
+		},
 		getTypeList: function (callback,fallback) {
 			Http.get("getTypes", (types) => {
 				callback(types);
@@ -88,19 +103,30 @@ export default {
 				callback(places);
 			}, fallback);
 		},
+		getItemList: function (callback,fallback) {
+			Http.get('getAllItems', function (items) {
+				callback(items);
+			}, fallback);
+		},
 		getDataPackage: function(callback,fallback) {
 			var DataPackage = {};
 			this.getTypeList((types)=>{
 				this.getPlaceList((places)=>{
-					var dto = {};
-					dto.types = types;
-					dto.places = places;
-					callback(dto);
+					this.getItemList((items)=>{
+						var dto = {};
+						dto.types = types;
+						dto.places = places;
+						dto.items = items;
+						callback(dto);
+					});
 				}, fallback);
 			},fallback);
 		},
 		doAjax: function(){
 			this.getDataPackage((dto)=>{
+				this.types.replace(dto.types); 
+				this.places.replace(dto.places); 
+				this.items.replace(dto.items);
 				window.DataPackage = dto;
 			}, this.onAjaxFailure);
 		},
@@ -111,6 +137,7 @@ export default {
 	},
 	mounted() {
 		this.doAjax();
+		window.App = this;
 	}
 }
 </script>
