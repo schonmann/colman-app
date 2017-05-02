@@ -6,38 +6,30 @@
             </div>
             <div slot="body">
                 <div class="row">
-                    <div class="col-lg-4">
+                    <div class="col-lg-5">
                         <div class="form-group">
-                            <label v-translate>NAME</label>
-                            <input type="text" class="form-control" v-model="item.name">
+                            <span class="form-title" v-translate>NAME</span>
+                            <span class="form-field">{{itemDTO.name}}</span>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <span class="form-title" v-translate>TYPE</span>
+                            <span class="form-field" v-translate>{{itemDTO.type}}</span>
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="form-group">
-                            <label v-translate>TYPE</label>
-                            <select class="form-control" v-model="item.type">
-                            <option disabled><span v-translate>SELECT_ONE</span></option>
-                            <option v-for="type,idx in types" v-bind:value="idx"><span v-translate>{{type}}</span></option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label v-translate>PLACE</label>
-                            <select class="form-control" v-model="item.place_id">
-                            <option disabled><span v-translate>SELECT_ONE</span></option>
-                            <option>N/A</option>
-                            <option v-for="p in places" v-bind:value="p.id">{{p.name}}</option>
-                            </select>
+                            <span class="form-title" v-translate>PLACE</span>
+                            <span class="form-field">{{itemDTO.place}}</span>
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label v-translate>DESCRIPTION</label>
-                    <textarea class="form-control" v-model="item.description"></textarea>
+                    <span class="form-title" v-translate>DESCRIPTION</span>
+                    <span class="form-field">{{itemDTO.description}}</span>
                 </div>
             </div>
-            </label>
             <div slot="footer">
                 <button class="btn btn-warning" @click="del"><span v-translate>DELETE</span></button>
                 <button class="btn light-primary-color" @click="hide"><span v-translate>CLOSE</span></button>
@@ -54,22 +46,21 @@ export default {
     data() {
         return {
             s: false,
-            item: {
-                name: "",
-                description: "",
-            },
+            itemDTO: new Item(),
         }
     },
     'methods': {
-        show: function(item){ 
-            this.item.id = item.id;
-            this.item.name = item.name;
-            this.item.description = item.description;
+        show: function(it){
+            this.itemDTO.id = it.id;
+            this.itemDTO.name = it.name;
+            this.itemDTO.type = DataPackage.types[it.type];
+            this.itemDTO.place = DataPackage.places.first(p=>p.id=it.place_id);
+            this.itemDTO.description = it.description;
             //Show modal.
             this.s = true; 
         },
         hide: function(){ this.s = false;},
-        addItem: function() { 
+        del: function() { 
             $emit('insertItem', item) && this.hide(); 
         }
     },
@@ -80,4 +71,12 @@ export default {
 </script>
 
 <style lang="css">
+.form-title{
+    display:block;
+    color:gray;
+}
+.form-field {
+    color:gray;
+    word-break: keep-all;
+}
 </style>

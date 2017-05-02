@@ -40,7 +40,7 @@ module.exports = {
         'PLACE': "Localização",
         'SELECT_ONE': "Selecione uma opção",
         'ADD': "Adicionar",
-        'close': "Fechar",
+        'CLOSE': "Fechar",
         'ITEM_INFO': "Informações do Item",
         'DELETE': "Apagar",
         'BOOK': "Livro",
