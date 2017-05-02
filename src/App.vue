@@ -7,9 +7,45 @@
 						&nbsp<label v-translate>APP_TITLE</label>&nbsp
 					<i class="fa fa-chevron-right secondary-text-color"></i>
 				</h3>
-				<div class="row" style="display:inline-block;float:right;">
+				<div class="row" style="float:right;">
 					<button class="btn btn-default btn-xs" @click="$translate.setLang('en');">EN</button>
 					<button class="btn btn-default btn-xs" @click="$translate.setLang('pt');">PT</button>
+				</div>
+			</div>
+			<div style="padding-top:20px;padding-bottom:30px;">
+				<div class="row" style="padding-bottom:10px;">
+					<div class="col-lg-3" v-translate>ORDER_BY</div>
+					<div class="col-lg-3" v-translate>TYPE</div>
+					<div class="col-lg-3" v-translate>STATUS</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-3">
+						<select class="form-control" @change="">
+							<option disabled><span v-translate>SELECT_ONE</span></option>
+							<option v-for="type,idx in types" v-bind:value="idx"><span v-translate>{{type}}</span></option>
+						</select>
+					</div>
+					<div class="col-lg-3">
+						<select class="form-control" @change="">
+							<option disabled><span v-translate>SELECT_ONE</span></option>
+							<option v-for="type,idx in types" v-bind:value="idx"><span v-translate>{{type}}</span></option>
+						</select>
+					</div>
+					<div class="col-lg-3">
+						<select class="form-control" @change="">
+							<option disabled><span v-translate>SELECT_ONE</span></option>
+							<option v-for="type,idx in types" v-bind:value="idx"><span v-translate>{{type}}</span></option>
+						</select>
+					</div>
+					<div class="col-lg-3">
+						<form class="search-form">
+							<div class="form-group has-feedback">
+								<label for="search" class="sr-only">Search</label>
+								<input type="text" class="form-control" name="search" id="search" placeholder="search">
+								<span class="glyphicon glyphicon-search form-control-feedback"></span>
+							</div>
+						</form>
+					</div>
 				</div>
 			</div>
 			<collection></collection>
@@ -171,6 +207,57 @@ body {
 	.header {
 		margin-bottom: 2rem;
 	}
+}
+
+.search-form .form-group {
+  float: right !important;
+  transition: all 0.35s, border-radius 0s;
+  width: 32px;
+  height: 32px;
+  background-color: #fff;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+  border-radius: 25px;
+  border: 1px solid #ccc;
+}
+.search-form .form-group input.form-control {
+  padding-right: 20px;
+  border: 0 none;
+  background: transparent;
+  box-shadow: none;
+  display:block;
+}
+.search-form .form-group input.form-control::-webkit-input-placeholder {
+  display: none;
+}
+.search-form .form-group input.form-control:-moz-placeholder {
+  /* Firefox 18- */
+  display: none;
+}
+.search-form .form-group input.form-control::-moz-placeholder {
+  /* Firefox 19+ */
+  display: none;
+}
+.search-form .form-group input.form-control:-ms-input-placeholder {
+  display: none;
+}
+.search-form .form-group:hover,
+.search-form .form-group.hover {
+  width: 100%;
+  border-radius: 4px 25px 25px 4px;
+}
+.search-form .form-group span.form-control-feedback {
+  position: absolute;
+  top: -1px;
+  right: -2px;
+  z-index: 2;
+  display: block;
+  width: 34px;
+  height: 34px;
+  line-height: 34px;
+  text-align: center;
+  color: #3596e0;
+  left: initial;
+  font-size: 14px;
 }
 
 .dark-primary-color    { background: #455A64; }

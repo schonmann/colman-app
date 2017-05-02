@@ -22,6 +22,8 @@ module.exports = {
         'BOOK': "Book",
         'CD': "CD",
         'DVD': "DVD",
+        'ORDER_BY': "Order By:",
+        'STATUS': "Status",
     },
     'pt': {
         'APP_TITLE': "Gerenciador de Coleção",
@@ -46,5 +48,7 @@ module.exports = {
         'BOOK': "Livro",
         'CD': "CD",
         'DVD': "DVD",
+        'ORDER_BY': 'Ordenar por:',
+        'STATUS': "Status",
     },
 };
