@@ -54,7 +54,7 @@ export default {
             this.itemDTO.id = it.id;
             this.itemDTO.name = it.name;
             this.itemDTO.type = DataPackage.types[it.type];
-            this.itemDTO.place = DataPackage.places.first(p=>p.id=it.place_id);
+            this.itemDTO.place = DataPackage.places.first(p=>p.id===it.place_id);
             this.itemDTO.description = it.description;
             //Show modal.
             this.s = true; 
