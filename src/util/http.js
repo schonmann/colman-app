@@ -27,6 +27,17 @@ Http.get = function (service, callback, fallback) {
         }
     });
 };
-Http.delete = function (url, data, callback, fallback) {
+Http.delete = function (service, data, callback, fallback) {
+    $.ajax({
+        url: Rest.url(service),
+        type: "delete",
+        dataType: "json",
+        success: function (res) {
+            typeof (callback) === 'function' && callback(res);
+        },
+        error: function (x, status, error) {
+            typeof (fallback) === 'function' && fallback(x,status,error);
+        }
+    });
 };
 module.exports = Http;

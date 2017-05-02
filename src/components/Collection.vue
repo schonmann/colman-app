@@ -6,6 +6,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import Item from './Item.vue'
 export default {
@@ -28,8 +29,8 @@ export default {
 		},
 		showItem: function (item) {
 			modalShowItem.show(item,(item)=>{
-				Http.post('deleteItem', item, (ok)=>{
-					this.items.removeAt(index);
+				Http.post('deleteItem',item,(ok)=>{
+					this.items.seekAndDestroy(i=>i.id===item.id);
 				}, (x,s,e)=>{
 					alert("Error: " + s);
 				});
