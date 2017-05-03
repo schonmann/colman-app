@@ -112,12 +112,11 @@ export default {
 			}, this.onAjaxFailure);
 		},
 		onFilterChanged: function(filters){
-			debugger;
 			this.lastFilter = filters;
 			this.items.sort((a,b)=>{return a[filters.field] > b[filters.field]});
 			this.items.each((i)=>{
 				var matchesType = filters.type === -1 || i.type === filters.type;
-				var matchesLoanStatus = filters.is_loaned === -1 || (filters.is_loaned === (i.loans.any() && !i.loans.last().ended));
+				var matchesLoanStatus = filters.is_loaned === -1 || (filters.is_loaned == (i.loans.any() && !i.loans.last().ended));
 				var matchesSearch = i.name.includes(filters.query) || i.description.includes(filters.query);
 				if(!(matchesType && matchesLoanStatus && matchesSearch)) i.hide = true;
 				else delete i.hide;

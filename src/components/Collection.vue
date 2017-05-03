@@ -77,6 +77,7 @@ export default {
 				Http.post('startLoan', data, (ok)=>{
 					var loan = {item_id:item.id,person_id:person.id,start_date:now};
 					DataPackage.items.first(i=>i.id === item.id).loans.push(loan);
+					App.refreshFilter();
 				}, (x,s,e)=>{
 					alert("Error: " + s);
 				});
@@ -88,6 +89,7 @@ export default {
 			var person = DataPackage.people.first(p=>p.id === last.person_id);
 			Http.post('endLoan', { item: item, person: person, end_date: now},(ok)=>{
 				last.ended = true; last.end_date = now;
+				App.refreshFilter();
 			}, (x,s,e)=>{
 				alert("Error: " + s);
 			});
