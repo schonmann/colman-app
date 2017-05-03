@@ -36,8 +36,8 @@
 					<div class="col-lg-3">
 						<select class="form-control" @change="">
 							<option disabled><span v-translate>SELECT_ONE</span></option>
-							<option value="loaned" v-translate>LOANED</option>
-							<option value="notLoaned" v-translate>NOT_LOANED</option>
+							<option value="loaned" v-translate>NOT_LOANED</option>
+							<option value="notLoaned" v-translate>LOANED</option>
 						</select>
 					</div>
 					<div class="col-lg-3">
@@ -66,9 +66,14 @@
 				<p>Developed by Antonio C. Schönmann Alves</p>
 			</div>
 		</div>
+		<!-- Modals! [START] -->
+		<add-person-modal></add-person-modal>
+		<loan-item-modal></loan-item-modal>
 		<add-item-modal></add-item-modal>
 		<show-item-modal></show-item-modal>
 		<add-place-modal></add-place-modal>
+		<loan-item-modal></loan-item-modal>
+		<!-- Modals! [END] -->
 	</div>
 </template>
 
@@ -78,13 +83,16 @@ import Collection from './components/Collection'
 import AddItemModal from './components/AddItemModal'
 import ShowItemModal from './components/ShowItemModal'
 import AddPlaceModal from './components/AddPlaceModal'
+import AddPersonModal from './components/AddPersonModal'
+import LoanItemModal from './components/LoanItemModal'
 
 export default {
-	'components': { Collection, AddItemModal, ShowItemModal, AddPlaceModal },
+	'components': { Collection, AddItemModal, ShowItemModal, AddPlaceModal, AddPersonModal, LoanItemModal },
 	'data': function(){
 		return {
 			types: [],
 			places: [],
+			people: [],
 			items: [],
 		}	
 	},
@@ -94,38 +102,55 @@ export default {
 			this.items.sort((a,b) => a[field] > b[field]);
 		},
 		getTypeList: function (callback,fallback) {
-			Http.get("getTypes", (types) => {
+			Http.get("getTypes", null, (types) => {
 				callback(types);
 			}, fallback);
 		},
 		getPlaceList: function (callback,fallback) {
-			Http.get("getPlaces", (places) => {
+			Http.get("getPlaces", null, (places) => {
 				callback(places);
 			}, fallback);
 		},
+		getPersonList: function(callback, fallback) {
+			Http.get("getPeople", null, (people) => {
+				callback(people);
+			},fallback);
+		},
 		getItemList: function (callback,fallback) {
-			Http.get('getAllItems', function (items) {
+			Http.get('getAllItems', null,(items)=>{
 				callback(items);
 			}, fallback);
 		},
+		populateItemsLoans: function(itemList, callback, fallback) {
+			itemList.asyncEach((item,next,stop)=>{
+				Http.get("getLoansByItem",item.id,(loans)=>{
+					item.loans = loans; next();
+				}, fallback);
+			}, callback);
+		},
 		getDataPackage: function(callback,fallback) {
-			var DataPackage = {};
 			this.getTypeList((types)=>{
 				this.getPlaceList((places)=>{
-					this.getItemList((items)=>{
-						var dto = {};
-						dto.types = types;
-						dto.places = places;
-						dto.items = items;
-						callback(dto);
-					});
+					this.getPersonList((people)=>{
+						this.getItemList((items)=>{
+							this.populateItemsLoans(items,()=>{
+								var dto = {};
+								dto.types = types;
+								dto.places = places;
+								dto.people = people;
+								dto.items = items;
+								callback(dto);
+							}, fallback);
+						}, fallback);
+					},fallback);
 				}, fallback);
 			},fallback);
 		},
 		doAjax: function(){
 			this.getDataPackage((dto)=>{
 				this.types.replace(dto.types); 
-				this.places.replace(dto.places); 
+				this.places.replace(dto.places);
+				this.people.replace(dto.people); 
 				this.items.replace(dto.items);
 				window.DataPackage = dto;
 			}, this.onAjaxFailure);

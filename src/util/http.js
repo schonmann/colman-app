@@ -14,9 +14,9 @@ Http.post = function (service, data, callback, fallback) {
         }
     });
 };
-Http.get = function (service, callback, fallback) {
+Http.get = function (service, param, callback, fallback) {
     $.ajax({
-        url: Rest.url(service),
+        url: Rest.url(service, param),
         type: "get",
         dataType: "json",
         success: function (res) {
