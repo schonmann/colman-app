@@ -112,7 +112,6 @@ export default {
 			}, this.onAjaxFailure);
 		},
 		onFilterChanged: function(filters){
-			debugger;
 			this.items.replace(DataPackageBackup.items.where((i)=>{
 				return (filters.type === -1 || i.type === filters.type) && 
 				(filters.is_loaned === (i.loans.any() && !i.loans.last().ended));
