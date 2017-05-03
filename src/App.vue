@@ -13,7 +13,7 @@
 				</div>
 			</div>
 			<collection-filters @filterchange="onFilterChanged" :types="types"></collection-filters>
-			<collection :filtered="items"></collection>
+			<collection :items="items"></collection>
 			<marketing></marketing>
 			<div class="footer">
 				<p>Developed by Antonio C. Schönmann Alves</p>
@@ -49,6 +49,7 @@ export default {
 			places: [],
 			people: [],
 			items: [],
+			lastFilter: {},
 		}	
 	},
 	'methods': {
@@ -108,14 +109,23 @@ export default {
 				this.people.replace(dto.people); 
 				this.items.replace(dto.items);
 				window.DataPackage = dto;
-				window.DataPackageBackup = Util.clone(dto);
 			}, this.onAjaxFailure);
 		},
 		onFilterChanged: function(filters){
-			this.items.replace(DataPackageBackup.items.where((i)=>{
-				return (filters.type === -1 || i.type === filters.type) && 
-				(filters.is_loaned === (i.loans.any() && !i.loans.last().ended));
-			}));
+			debugger;
+			this.lastFilter = filters;
+			this.items.sort((a,b)=>{return a[filters.field] > b[filters.field]});
+			this.items.each((i)=>{
+				var matchesType = filters.type === -1 || i.type === filters.type;
+				var matchesLoanStatus = filters.is_loaned === -1 || (filters.is_loaned === (i.loans.any() && !i.loans.last().ended));
+				var matchesSearch = i.name.includes(filters.query) || i.description.includes(filters.query);
+				if(!(matchesType && matchesLoanStatus && matchesSearch)) i.hide = true;
+				else delete i.hide;
+			});
+			this.items.refresh();
+		},
+		refreshFilter: function() {
+			this.onFilterChanged(this.lastFilter);
 		},
 		//Behavior on failure to get data package.
 		onAjaxFailure: function(x,s,e) {

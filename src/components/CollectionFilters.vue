@@ -60,16 +60,17 @@ export default {
     },
     mounted() {
         this.fields = {
-            "NAME": "Name",
-            "DESCRIPTION": "Description",
-            "TYPE": "Type",
+            "NAME": "name",
+            "DESCRIPTION": "description",
+            "TYPE": "type",
         };
         this.statuses = {
-            "NOT_LOANED": false,
-            "LOANED": true,
+            "ALL": -1,
+            "NOT_LOANED": 0,
+            "LOANED": 1,
         };
         //Set filter defaults.
-        this.filter.is_loaned = this.statuses.NOT_LOANED;
+        this.filter.is_loaned = this.statuses.ALL;
         this.filter.field = this.fields.NAME
         this.filter.query = "";
         this.filter.type = -1;

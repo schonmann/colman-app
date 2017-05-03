@@ -14,7 +14,15 @@ Array.prototype.insert = function (index, item) {
 Array.prototype.popClear = function() {
     while(this.length > 0)
         this.pop();
-}
+};
+
+Array.prototype.refresh = function() {
+    var arr = []; var it;
+    while(it = this.pop()){
+        arr.unshift(it);
+    }
+    this.replace(arr);
+};
 
 Array.prototype.clear = function () {
     this.length = 0;

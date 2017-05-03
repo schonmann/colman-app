@@ -2,7 +2,10 @@
   <div id="collection">
     <div class="jumbotron light-primary-color ">
       <label v-if="items.empty()" v-translate>EMPTY_COLLECTION</label>
-      	<item v-else v-for="i,idx in items" :me="i" @click.native="showItem(i)" ></item>
+			<span v-else-if="items.empty(i=>!i.hide)" v-translate>NO_MATCH_FILTERS</span>
+			<div v-else>
+      	<item v-for="i,idx in items" v-if="!i.hide" :me="i" @click.native="showItem(i)" ></item>
+			</div>
     </div>
 		<button class="btn btn-md" @click="addPlace" v-translate>ADD_PLACE</button>
 		<button class="btn btn-md" @click="addPerson" v-translate>ADD_PERSON</button>
@@ -14,17 +17,13 @@ import Item from './Item.vue'
 export default {
 	components: { Item },
 	name: 'collection',
-	data() {
-		return {
-			items: [] 
-		}
-	},
 	props: {
-		filtered: {type: Array}
+		items: {type: Array},
 	},
 	watch: {
-		filtered: function(filteredItems) {
-			this.items.replace(filteredItems);
+		items: {
+			handler: function(a){
+			}, deep: true
 		}
 	},
 	methods: {
@@ -33,6 +32,7 @@ export default {
 				Http.post('insertItem', item, (ok)=>{
 					this.items.push(item);
 					DataPackage.items.push(item);
+					App.refreshFilter();
 				}, (x,s,e)=>{
 					alert("Error: " + s);
 				});
