@@ -112,12 +112,10 @@ export default {
 			}, this.onAjaxFailure);
 		},
 		onFilterChanged: function(filters){
-			console.log(this.filters);
-			console.log(this.items);
 			debugger;
 			this.items.replace(DataPackageBackup.items.where((i)=>{
 				return (filters.type === -1 || i.type === filters.type) && 
-				(filters.is_loaned === i.loans.any() && !i.loans.last().ended);
+				(filters.is_loaned === (i.loans.any() && !i.loans.last().ended));
 			}));
 		},
 		//Behavior on failure to get data package.
