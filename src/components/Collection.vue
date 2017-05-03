@@ -71,7 +71,7 @@ export default {
 		},
 		startItemLoan: function(item) {
 			modalLoanItem.show((person)=>{
-				var now = new Date();
+				var now = new Date().getTime();
 				//Send to Web API via HTTP POST.
 				var data = {item:item,person:person,date:now};
 				Http.post('startLoan', data, (ok)=>{

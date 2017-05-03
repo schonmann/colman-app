@@ -49,12 +49,18 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-12">
+                        <div class="col-lg-8">
                             <div class="form-group">
                                 <span class="form-title" v-translate>EMAIL</span>
                                 <span class="form-field">{{person.email}}</span>
                             </div>
                         </div>
+                        <!--<div class="col-lg-4">
+                            <div class="form-group">
+                                <span class="form-title" v-translate>Data</span>
+                                <span class="form-field">{{lastloandate}}</span>
+                            </div>
+                        </div>-->
                     </div>
                 </div>
             </div>
@@ -81,6 +87,11 @@ export default {
             person: {},
         }
     },
+    'computed':{
+        lastloandate: function(){
+            return this.item.loans.any() ? this.item.loans.last().start_date : null;
+        }
+    },
     'methods': {
         show: function(item, ondel, onloan, onendloan){
             this.ondel = ondel;
@@ -93,7 +104,7 @@ export default {
             this.itemDTO.type = DataPackage.types[item.type];
             this.itemDTO.place = item.place_id ? DataPackage.places.first(p=>p.id===item.place_id).name : "N/A";
             this.itemDTO.description = item.description;
-
+            
             if(this.currentlyLoaned()){
                 var lastCarrierId = item.loans.last().person_id;
                 this.person = DataPackage.people.first(p=>p.id === lastCarrierId)

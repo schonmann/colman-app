@@ -9,17 +9,17 @@
                     <div class="form-group">
                         <div class="row">
                             <div class="col-sm-6">
-                                <label v-translate>NAME</label>
+                                <span v-translate>NAME</span>
                                 <input type="text" class="form-control" v-model="person.name">
                             </div>
                             <div class="col-sm-6">
-                                <label v-translate>PHONE</label>
+                                <span v-translate>PHONE</span>
                                 <input type="text" class="form-control" v-model="person.phone">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-12">
-                                <label v-translate>EMAIL</label>
+                                <span v-translate>EMAIL</span>
                                 <input type="text" class="form-control" v-model="person.email">
                             </div>
                         </div>

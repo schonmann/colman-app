@@ -6,14 +6,13 @@
             </div>
             <div slot="body">
                 <div class="form-group">
-                    <label v-translate>NAME</label>
+                    <span v-translate>NAME</span>
                     <input type="text" class="form-control" v-model="place.name">
                 </div>
             </div>
-            </label>
             <div slot="footer">
-                <button class="btn btn-success" @click="add"><span v-translate>ADD</span></button>
-                <button class="btn light-primary-color" @click="hide"><span v-translate>CLOSE</span></button>
+                <button class="btn btn-success" @click="add()"><span v-translate>ADD</span></button>
+                <button class="btn light-primary-color" @click="hide()"><span v-translate>CLOSE</span></button>
             </div>
         </modal>
     </div>
@@ -38,7 +37,9 @@ export default {
             this.callback = callback; //Callback function to return fresh new place.
             this.place = new Place();
         },
-        hide: function(){ this.s = false;},
+        hide: function(){ 
+            this.s = false;
+        },
         add: function() { 
             this.callback(this.place);
             this.hide();

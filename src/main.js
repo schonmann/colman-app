@@ -11,7 +11,7 @@ import Locales from './util/locale.js'
 import App from './App'
 
 // ===== Bootstrap components integration (JQuery needed) ======
-
+window.$ = window.jQuery = require('jquery')
 require('bootstrap-sass')
 require('./util/arrayutils.js')
 
@@ -32,8 +32,7 @@ Vue.use(VueResource)
 Vue.use(VueTranslate)
 Vue.locales(Locales)
 
-// ======================== Vue Instance =======================
-
+//Initialize vue instance and set the default vue-translate language (see locale.js/config.js).
 new Vue({
   router,
   store,

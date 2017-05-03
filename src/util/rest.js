@@ -13,7 +13,8 @@ var rest = {
     'endLoan': 'api/loan/end',
     'getLoansByItem': 'api/loan/byItem',
     'insertPlace': 'api/place/insert',
-    'insertPerson': 'api/person/insert'
+    'insertPerson': 'api/person/insert',
+    'getByFilter': 'api/item/getByFilter',
 };
 Rest.url = function(service,params){
     return protocol + "://" + ip + ":" + port + "/" + rest[service] + (params ? "/" + params : "");

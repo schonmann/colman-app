@@ -12,56 +12,9 @@
 					<button class="btn btn-default btn-xs" @click="$translate.setLang('pt');">PT</button>
 				</div>
 			</div>
-			<div style="padding-top:20px;padding-bottom:30px;">
-				<div class="row" style="padding-bottom:10px;">
-					<div class="col-lg-3" v-translate>ORDER_BY</div>
-					<div class="col-lg-3" v-translate>TYPE</div>
-					<div class="col-lg-3" v-translate>STATUS</div>
-				</div>
-				<div class="row">
-					<div class="col-lg-3">
-						<select class="form-control" v-on:change="orderBy">
-							<option disabled><span v-translate>SELECT_ONE</span></option>
-							<option value="name" v-translate>NAME</option>
-							<option value="description" v-translate>DESCRIPTION</option>
-							<option value="type" v-translate>TYPE</option>
-						</select>
-					</div>
-					<div class="col-lg-3">
-						<select class="form-control" @change="">
-							<option value="-1"><span v-translate>ALL</span></option>
-							<option v-for="type,idx in types" v-bind:value="idx"><span v-translate>{{type}}</span></option>
-						</select>
-					</div>
-					<div class="col-lg-3">
-						<select class="form-control" @change="">
-							<option disabled><span v-translate>SELECT_ONE</span></option>
-							<option value="loaned" v-translate>NOT_LOANED</option>
-							<option value="notLoaned" v-translate>LOANED</option>
-						</select>
-					</div>
-					<div class="col-lg-3">
-						<form class="search-form">
-							<div class="form-group has-feedback">
-								<label for="search" class="sr-only">Search</label>
-								<input type="text" class="form-control" name="search" id="search" placeholder="search">
-								<span class="glyphicon glyphicon-search form-control-feedback"></span>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
+			<collection-filters @filterchange="onFilterChanged" :types="types"></collection-filters>
 			<collection :filtered="items"></collection>
-			<div class="row marketing">
-				<div class="col-lg-6">
-					<h4 class="primary-text-color" v-translate>ADD_ITEMS_TO_COLLECTION</h4>
-					<p v-translate>D_ADD_ITEMS_TO_COLLECTION</p>
-					<h4 class="primary-text-color" v-translate>REGISTER_NEW_PLACES</h4>
-					<p v-translate>D_REGISTER_NEW_PLACES</p>
-					<h4 class="primary-text-color" v-translate>LOAN_YOUR_ITEMS</h4>
-					<p v-translate>D_LOAN_YOUR_ITEMS</p>
-				</div>
-			</div>
+			<marketing></marketing>
 			<div class="footer">
 				<p>Developed by Antonio C. Schönmann Alves</p>
 			</div>
@@ -85,9 +38,11 @@ import ShowItemModal from './components/ShowItemModal'
 import AddPlaceModal from './components/AddPlaceModal'
 import AddPersonModal from './components/AddPersonModal'
 import LoanItemModal from './components/LoanItemModal'
+import CollectionFilters from './components/CollectionFilters'
+import Marketing from './components/Marketing'
 
 export default {
-	'components': { Collection, AddItemModal, ShowItemModal, AddPlaceModal, AddPersonModal, LoanItemModal },
+	'components': { Collection, AddItemModal, ShowItemModal, AddPlaceModal, AddPersonModal, LoanItemModal, CollectionFilters, Marketing },
 	'data': function(){
 		return {
 			types: [],
@@ -117,7 +72,7 @@ export default {
 			},fallback);
 		},
 		getItemList: function (callback,fallback) {
-			Http.get('getAllItems', null,(items)=>{
+			Http.get('getAllItems', null, (items)=>{
 				callback(items);
 			}, fallback);
 		},
@@ -155,13 +110,24 @@ export default {
 				window.DataPackage = dto;
 			}, this.onAjaxFailure);
 		},
+		onFilterChanged: function(filters){
+			Http.post('getByFilter', filters, (filteredItems)=>{
+				this.populateItemsLoans(this.items, ()=>{
+					this.items.replace(filteredItems);
+					window.DataPackage.items.replace(filteredItems);
+				}, this.onAjaxFailure);
+			}, this.onAjaxFailure);
+		},
 		//Behavior on failure to get data package.
 		onAjaxFailure: function(x,s,e) {
 			alert("Error: " + s);
 		}
 	},
-	mounted() {
+	created() {
 		this.doAjax();
+		this.$on('filterChanged', this.onFilterChanged);
+	},
+	mounted() {
 		window.App = this;
 	}
 }
