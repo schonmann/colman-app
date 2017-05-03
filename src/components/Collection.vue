@@ -4,6 +4,8 @@
       <label v-if="items.empty()" v-translate>EMPTY_COLLECTION</label>
       	<item v-else v-for="i,idx in items" :me="i" @click.native="showItem(i)" ></item>
     </div>
+		<button class="btn btn-md" @click="addPlace" v-translate>ADD_PLACE</button>
+		<button class="btn btn-md" @click="addPerson" v-translate>ADD_PERSON</button>
   </div>
 </template>
 
@@ -26,37 +28,84 @@ export default {
 		}
 	},
 	methods: {
-		addItemToCollection: function () {
+		addItem: function () {
 			modalAddItem.show((item)=>{
 				Http.post('insertItem', item, (ok)=>{
 					this.items.push(item);
+					DataPackage.items.push(item);
+				}, (x,s,e)=>{
+					alert("Error: " + s);
+				});
+			});
+		},
+		addPlace: function(){
+			modalAddPlace.show((place)=>{
+				Http.post('insertPlace', place, (ok)=>{
+					DataPackage.places.push(place);
+				}, (x,s,e)=>{
+					alert("Error: " + s);
+				});
+			});
+		},
+		addPerson: function(){
+			modalAddPerson.show((person)=>{
+				Http.post('insertPerson', person, (ok)=>{
+					DataPackage.people.push(person);
 				}, (x,s,e)=>{
 					alert("Error: " + s);
 				});
 			});
 		},
 		showItem: function (item) {
-			modalShowItem.show(item,(item)=>{
-				Http.post('deleteItem',item,(ok)=>{
-					this.items.seekAndDestroy(i=>i.id===item.id);
+			modalShowItem.show(item,
+				this.deleteItem,
+				this.startItemLoan,
+				this.endItemLoan);
+		},
+		deleteItem: function(item) {
+			Http.post('deleteItem',item,(ok)=>{
+				this.items.seekAndDestroy(i=>i.id===item.id);
+			}, (x,s,e)=>{
+				alert("Error: " + s);
+			});
+		},
+		startItemLoan: function(item) {
+			modalLoanItem.show((person)=>{
+				var now = new Date();
+				//Send to Web API via HTTP POST.
+				var data = {item:item,person:person,date:now};
+				Http.post('startLoan', data, (ok)=>{
+					var loan = {item_id:item.id,person_id:person.id,start_date:now};
+					DataPackage.items.first(i=>i.id === item.id).loans.push(loan);
 				}, (x,s,e)=>{
 					alert("Error: " + s);
 				});
 			});
 		},
-	/*When user hit the gray area, the interface
-	will pop-up a item add modal. This setups click
-	listener by class.*/
+		endItemLoan: function(item) {
+			var now = new Date();
+			var last = item.loans.last();
+			var person = DataPackage.people.first(p=>p.id === last.person_id);
+			Http.post('endLoan', { item: item, person: person, end_date: now},(ok)=>{
+				last.ended = true; last.end_date = now;
+			}, (x,s,e)=>{
+				alert("Error: " + s);
+			});
+		},
+		/*When user hit the gray area, the interface
+		will pop-up a item add modal. This setups click
+		listener by class.*/
 		prepareGrayAreaClickListeners: function () {
 			var triggerClass = 'jumbotron'; var me = this;
 			$('.' + triggerClass).click(function (e) {
 				if (e.toElement.className.includes(triggerClass))
-					me.addItemToCollection();
+					me.addItem();
 			});
 		}
 	},
 	mounted() {
 		this.prepareGrayAreaClickListeners();
+		window.Collection = this;
 	}
 }
 </script>

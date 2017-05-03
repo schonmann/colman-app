@@ -23,6 +23,8 @@ window.Util = require('./util/util.js')
 window.Item = require('./model/item.js')
 window.Person = require('./model/person.js')
 window.Place = require('./model/place.js')
+window.Loan = require('./model/loan.js')
+window.ModelWrapper = require('./model/modelwrapper.js')
 // ===================== Basic imports =========================
 import Locales from './util/locale.js'
 import Config from './util/config.js'
