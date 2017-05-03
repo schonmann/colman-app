@@ -115,6 +115,7 @@ export default {
 			this.lastFilter = filters;
 			this.items.sort((a,b)=>{return a[filters.field] > b[filters.field]});
 			this.items.each((i)=>{
+				var hasCurrentLoan
 				var matchesType = filters.type === -1 || i.type === filters.type;
 				var matchesLoanStatus = filters.is_loaned === -1 || (filters.is_loaned == (i.loans.any() && !i.loans.last().ended));
 				var matchesSearch = i.name.includes(filters.query) || i.description.includes(filters.query);
@@ -124,7 +125,7 @@ export default {
 			this.items.refresh();
 		},
 		refreshFilter: function() {
-			this.onFilterChanged(this.lastFilter);
+			this.onFilterChanged(CollectionFilter.filter);
 		},
 		//Behavior on failure to get data package.
 		onAjaxFailure: function(x,s,e) {

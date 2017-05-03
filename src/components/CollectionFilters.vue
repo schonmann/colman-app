@@ -51,7 +51,7 @@ export default {
     },
     'props': {types : {type:Array}},
     'methods': {
-        //When any filter change is detected this method will be called, 
+        //Whenenever filter changes are detected, this method will be called, 
         //and a filter change event will be fired so that the parent 
         //component can handle it.
         onfilterchanged: function(){
@@ -74,7 +74,8 @@ export default {
         this.filter.field = this.fields.NAME
         this.filter.query = "";
         this.filter.type = -1;
-    }
+        window.CollectionFilter = this;
+    },
 }
 </script>
 
