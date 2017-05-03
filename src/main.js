@@ -5,37 +5,35 @@
 import Vue from 'vue'
 import VueResource from 'vue-resource'
 import VueTranslate from 'vue-translate-plugin'
-
-Vue.use(VueResource)
-Vue.use(VueTranslate)
-
 import store from './store'
 import router from './router'
+import Locales from './util/locale.js'
+import App from './App'
 
 // ===== Bootstrap components integration (JQuery needed) ======
-window.$ = window.jQuery = require('jquery')
-require('bootstrap-sass')
 
-// ======================= Utils ===============================
+require('bootstrap-sass')
 require('./util/arrayutils.js')
+
+// ======================== Utils =======================
 window.Util = require('./util/util.js')
-// ======================= models ===============================
+window.Http = require('./util/http.js')
+window.Config = require('./util/config.js')
+
+// ======================== Models ======================
+
 window.Item = require('./model/item.js')
 window.Person = require('./model/person.js')
 window.Place = require('./model/place.js')
 window.Loan = require('./model/loan.js')
 window.ModelWrapper = require('./model/modelwrapper.js')
-// ===================== Basic imports =========================
-import Locales from './util/locale.js'
-import Config from './util/config.js'
-import Http from './util/http.js'
-import App from './App'
-// ======================= Base Component ======================
-Vue.locales(Locales);
-window.Http = Http;
-window.Config = Config;
+
+Vue.use(VueResource)
+Vue.use(VueTranslate)
+Vue.locales(Locales)
+
 // ======================== Vue Instance =======================
-/* eslint-disable no-new */
+
 new Vue({
   router,
   store,
