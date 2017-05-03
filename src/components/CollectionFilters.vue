@@ -19,7 +19,7 @@
                 </select>
             </div>
             <div class="col-lg-3">
-                <select class="form-control" v-model="filter.loaned" @change="onfilterchanged">
+                <select class="form-control" v-model="filter.is_loaned" @change="onfilterchanged">
                     <option disabled><span v-translate>SELECT_ONE</span></option>
                     <option v-for="(v,k) in statuses" v-bind:value="v"><span v-translate>{{k}}</span></option>
                 </select>
@@ -28,7 +28,7 @@
                 <form id="sf" class="search-form">
                     <div class="form-group has-feedback">
                         <label for="search" class="sr-only">Search</label>
-                        <input type="text" class="form-control" v-model="filter.search" @change="onfilterchanged" name="search" id="search" placeholder="search">
+                        <input type="text" class="form-control" v-model="filter.query" @change="onfilterchanged" name="search" id="search" placeholder="search">
                         <span class="glyphicon glyphicon-search form-control-feedback"></span>
                     </div>
                 </form>
@@ -69,9 +69,9 @@ export default {
             "LOANED": true,
         };
         //Set filter defaults.
-        this.filter.loaned = this.statuses.NOT_LOANED;
+        this.filter.is_loaned = this.statuses.NOT_LOANED;
         this.filter.field = this.fields.NAME
-        this.filter.search = "";
+        this.filter.query = "";
         this.filter.type = -1;
     }
 }

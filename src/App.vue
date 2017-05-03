@@ -108,15 +108,17 @@ export default {
 				this.people.replace(dto.people); 
 				this.items.replace(dto.items);
 				window.DataPackage = dto;
+				window.DataPackageBackup = Util.clone(dto);
 			}, this.onAjaxFailure);
 		},
 		onFilterChanged: function(filters){
-			Http.post('getByFilter', filters, (filteredItems)=>{
-				this.populateItemsLoans(this.items, ()=>{
-					this.items.replace(filteredItems);
-					window.DataPackage.items.replace(filteredItems);
-				}, this.onAjaxFailure);
-			}, this.onAjaxFailure);
+			console.log(this.filters);
+			console.log(this.items);
+			debugger;
+			this.items.replace(DataPackageBackup.items.where((i)=>{
+				return (filters.type === -1 || i.type === filters.type) && 
+				(filters.is_loaned === i.loans.any() && !i.loans.last().ended);
+			}));
 		},
 		//Behavior on failure to get data package.
 		onAjaxFailure: function(x,s,e) {

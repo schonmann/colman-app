@@ -8,4 +8,7 @@ Util.guid = function() {
 	return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
 		s4() + '-' + s4() + s4() + s4();
 };
+Util.clone = function(o){
+	return JSON.parse(JSON.stringify(o));
+};
 module.exports = Util;
