@@ -26,7 +26,7 @@
                             <label v-translate>PLACE</label>
                             <select class="form-control" v-model="item.place_id">
                             <option disabled><span v-translate>SELECT_ONE</span></option>
-                            <option>N/A</option>
+                            <option value="">N/A</option>
                             <option v-for="p in places" v-bind:value="p.id">{{p.name}}</option>
                             </select>
                         </div>

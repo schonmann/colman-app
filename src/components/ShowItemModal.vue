@@ -25,12 +25,42 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <span class="form-title" v-translate>DESCRIPTION</span>
-                    <span class="form-field">{{itemDTO.description}}</span>
+                <div class="row form-group">
+                    <div class="col-lg-12">
+                        <span class="form-title" v-translate>DESCRIPTION</span>
+                        <span class="form-field">{{itemDTO.description}}</span>
+                    </div>
+                </div>
+
+                <div v-if="currentlyLoaned()">
+                    <div class="loanlabel">Dados de Empréstimo</div>
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="form-group">
+                                <span class="form-title" v-translate>NAME</span>
+                                <span class="form-field">{{person.name}}</span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <span class="form-title" v-translate>PHONE</span>
+                                <span class="form-field">{{person.phone}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <span class="form-title" v-translate>EMAIL</span>
+                                <span class="form-field">{{person.email}}</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div slot="footer">
+                <button v-if="currentlyLoaned()" style="float:left" class="btn btn-success" @click="endloan"><span v-translate>END_LOAN</span></button>
+                <button v-else style="float:left" class="btn btn-success" @click="loan"><span v-translate>LOAN_ITEM</span></button>
                 <button class="btn btn-warning" @click="del"><span v-translate>DELETE</span></button>
                 <button class="btn light-primary-color" @click="hide"><span v-translate>CLOSE</span></button>
             </div>
@@ -47,27 +77,46 @@ export default {
         return {
             s: false,
             itemDTO: new Item(),
-            item: {}
+            item: {},
+            person: {},
         }
     },
     'methods': {
-        show: function(item, callback){
-            this.callback = callback;
+        show: function(item, ondel, onloan, onendloan){
+            this.ondel = ondel;
+            this.onloan = onloan;
+            this.onendloan = onendloan;
             this.item = item;
-            //Build DTO to display data properly.
+            //Build item DTO to display info properly.
             this.itemDTO.id = item.id;
             this.itemDTO.name = item.name;
             this.itemDTO.type = DataPackage.types[item.type];
-            this.itemDTO.place = DataPackage.places.first(p=>p.id===item.place_id);
+            this.itemDTO.place = item.place_id ? DataPackage.places.first(p=>p.id===item.place_id).name : "N/A";
             this.itemDTO.description = item.description;
+
+            if(this.currentlyLoaned()){
+                var lastCarrierId = item.loans.last().person_id;
+                this.person = DataPackage.people.first(p=>p.id === lastCarrierId)
+            }
             //Show modal.
             this.s = true; 
         },
         hide: function(){ this.s = false;},
         del: function() {
-            this.callback(this.item);
+            this.ondel(this.item);
             this.hide();
-        }
+        },
+        loan: function() {
+            this.onloan(this.item);
+            this.hide();
+        },
+        endloan: function() {
+            this.onendloan(this.item);
+            this.hide();
+        },
+        currentlyLoaned: function() {
+            return this.item.loans.any() && !this.item.loans.last().ended;
+        },
     },
     mounted() {
         window.modalShowItem = this;
@@ -83,5 +132,10 @@ export default {
 .form-field {
     color: gray;
     word-break: break-all;
+}
+.loanlabel{
+    color: #22AA11;
+    margin-bottom:10px;
+    margin-top:10px;
 }
 </style>

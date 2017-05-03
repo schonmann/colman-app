@@ -27,7 +27,7 @@ export default {
     data() {
         return {
             s: false,
-            place: new Place(),
+            place: {},
             types: [],
             places: [],
         }
