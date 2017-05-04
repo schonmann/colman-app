@@ -26,54 +26,84 @@ export default {
 	props: {
 		items: { type: Array },
 	},
-	watch: {
-		items: {
-			handler: function(a){
-			}, deep: true
-		}
-	},
 	methods: {
+
+		/**
+			@method addItem
+			@description Open modal to add a new item.
+		*/
+
 		addItem: function () {
 			modalAddItem.show((item)=>{
 				new ItemDAO().insert(item, ()=>{
-					this.items.push(item);
+					DataPackage.items.push(item);
 					/* Emit refresh filter event to parent vue instance. */
 					this.$emit('refreshfilter');
 				}, this.onAjaxError);
 			});
 		},
+
+		/**
+			@method addPlace
+			@description Open modal to add a new place.
+		*/
+
 		addPlace: function(){
 			modalAddPlace.show((place)=>{
-				Http.post('insertPlace', place, (ok)=>{
+				new PlaceDAO().insert(place, ()=>{
 					DataPackage.places.push(place);
 				}, this.onAjaxError);
 			});
 		},
+
+		/**
+			@method addPerson
+			@description Open modal to add a new user.
+		*/
+
 		addPerson: function(){
 			modalAddPerson.show((person)=>{
-				Http.post('insertPerson', person, (ok)=>{
+				new PersonDAO.insert(person, ()=>{
 					DataPackage.people.push(person);
 				}, this.onAjaxError);
 			});
 		},
+
+		/**
+			@method showItem
+			@description Show item info modal.
+			@param {Object} item Target item.
+		*/
+
 		showItem: function (item) {
 			modalShowItem.show(item,
 				this.deleteItem,
 				this.startItemLoan,
 				this.endItemLoan);
 		},
+
+		/**
+			@method deleteItem
+			@description Callback function when user click's the delete button (item info modal).
+			@param {Object} item Target item.
+		*/
+
 		deleteItem: function(item) {
-			Http.post('deleteItem',item,(ok)=>{
-				this.items.seekAndDestroy(i=>i.id===item.id);
+			new ItemDAO().delete(item, ()=>{
+				DataPackage.items.seekAndDestroy(i=>i.id===item.id);
 			}, this.onAjaxError);
 		},
+
+		/**
+			@method startItemLoan
+			@description Callback function when user click's the start loan button (item info modal).
+			@param {Object} item Target item.
+		*/
+
 		startItemLoan: function(item) {
 			modalLoanItem.show((person)=>{
-				var now = new Date().getTime();
-				//Send to Web API via HTTP POST.
-				var data = {item:item,person:person,date:now};
-				Http.post('startLoan', data, (ok)=>{
-					var loan = {item_id:item.id,person_id:person.id,start_date:now};
+				new LoanDAO().startLoan(item,person,()=>{
+					var loan = {item_id:item.id,person_id:person.id,start_date:new Date()};
 					DataPackage.items.first(i=>i.id === item.id).loans.push(loan);
 					/* Emit refresh filter event to parent vue instance. */
 					this.$emit('refreshfilter');
@@ -82,9 +112,9 @@ export default {
 		},
 
 		/**
-			@method prepareGrayAreaClickListeners
-			@description When user hit the gray area, the interface will
-						 pop-up a item add modal. This setups click listener by class
+			@method endItemLoan
+			@description Callback function when user click's the end loan button (item info modal).
+			@param {Object} item Target item.
 		*/
 
 		endItemLoan: function(item) {
