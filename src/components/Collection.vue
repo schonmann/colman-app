@@ -7,8 +7,14 @@
       	<item v-for="i,idx in items" v-if="!i.hide" :me="i" @click.native="showItem(i)" ></item>
 			</div>
     </div>
-		<button class="btn btn-md" @click="addPlace" v-translate>ADD_PLACE</button>
-		<button class="btn btn-md" @click="addPerson" v-translate>ADD_PERSON</button>
+	<div class="row" align="center">
+		<div class="col-sm-6">
+			<button style="float:right;" class="btn btn-sm cbtn btn-success" @click="addPlace" v-translate>ADD_PLACE</button>
+		</div>
+		<div class="col-sm-6">
+			<button style="float:left;"  class="btn btn-sm cbtn btn-success" @click="addPerson" v-translate>ADD_PERSON</button>
+		</div>
+	</div>
   </div>
 </template>
 
@@ -29,31 +35,25 @@ export default {
 	methods: {
 		addItem: function () {
 			modalAddItem.show((item)=>{
-				Http.post('insertItem', item, (ok)=>{
+				new ItemDAO().insert(item, ()=>{
 					this.items.push(item);
 					/* Emit refresh filter event to parent vue instance. */
 					this.$emit('refreshfilter');
-				}, (x,s,e)=>{
-					alert("Error: " + s);
-				});
+				}, this.onAjaxError);
 			});
 		},
 		addPlace: function(){
 			modalAddPlace.show((place)=>{
 				Http.post('insertPlace', place, (ok)=>{
 					DataPackage.places.push(place);
-				}, (x,s,e)=>{
-					alert("Error: " + s);
-				});
+				}, this.onAjaxError);
 			});
 		},
 		addPerson: function(){
 			modalAddPerson.show((person)=>{
 				Http.post('insertPerson', person, (ok)=>{
 					DataPackage.people.push(person);
-				}, (x,s,e)=>{
-					alert("Error: " + s);
-				});
+				}, this.onAjaxError);
 			});
 		},
 		showItem: function (item) {
@@ -65,9 +65,7 @@ export default {
 		deleteItem: function(item) {
 			Http.post('deleteItem',item,(ok)=>{
 				this.items.seekAndDestroy(i=>i.id===item.id);
-			}, (x,s,e)=>{
-				alert("Error: " + s);
-			});
+			}, this.onAjaxError);
 		},
 		startItemLoan: function(item) {
 			modalLoanItem.show((person)=>{
@@ -79,9 +77,7 @@ export default {
 					DataPackage.items.first(i=>i.id === item.id).loans.push(loan);
 					/* Emit refresh filter event to parent vue instance. */
 					this.$emit('refreshfilter');
-				}, (x,s,e)=>{
-					alert("Error: " + s);
-				});
+				}, this.onAjaxError);
 			});
 		},
 
@@ -99,9 +95,7 @@ export default {
 				last.end_date = new Date();
 				/* Emit refresh filter event to parent vue instance. */
 				this.$emit('refreshfilter');
-			}, (x,s,e)=>{
-				alert("Error: " + s);
-			});
+			}, this.onAjaxError);
 		},
 		
 		/**
@@ -116,6 +110,9 @@ export default {
 				if (e.toElement.className.includes(triggerClass))
 					me.addItem();
 			});
+		},
+		onAjaxError: (x,s,e)=>{
+			alert("Error: " + s);
 		}
 	},
 	mounted() {
@@ -137,4 +134,6 @@ export default {
     font-size: 1.5rem
   label
     color: gray
+  .cbtn
+    box-shadow: 2px 3px 3px #AAA
 </style>

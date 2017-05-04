@@ -67,7 +67,7 @@
             <div slot="footer">
                 <button v-if="currentlyLoaned()" style="float:left" class="btn btn-success" @click="endloan"><span v-translate>END_LOAN</span></button>
                 <button v-else style="float:left" class="btn btn-success" @click="loan"><span v-translate>LOAN_ITEM</span></button>
-                <button class="btn btn-warning" @click="del"><span v-translate>DELETE</span></button>
+                <button class="btn btn-danger" @click="del"><span v-translate>DELETE</span></button>
                 <button class="btn light-primary-color" @click="hide"><span v-translate>CLOSE</span></button>
             </div>
         </modal>
