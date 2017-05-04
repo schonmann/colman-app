@@ -1,11 +1,11 @@
 function ItemDAO() {
 }
 ItemDAO.prototype.getAll = (callback, fallback) => {
-    Http.get("getAllPlaces", null, callback, fallback);
+    Http.get("getAllItems", null, callback, fallback);
 };
-ItemDAO.prototype.insert = (place, callback, fallback) => {
-    Http.post("insertPlace", place, callback, fallback);
+ItemDAO.prototype.insert = (item, callback, fallback) => {
+    Http.post("insertItem", item, callback, fallback);
 };
-ItemDAO.prototype.delete = (place, callback, fallback) => {
+ItemDAO.prototype.delete = (item, callback, fallback) => {
 };
 module.exports = ItemDAO;

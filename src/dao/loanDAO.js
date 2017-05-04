@@ -4,7 +4,7 @@ LoanDAO.prototype.startLoan = (item, person, callback, fallback) => {
     var wrapper = {};
     wrapper.item = item;
     wrapper.person = person;
-    wrapper.date = new Date();
+    wrapper.start_date = new Date();
     //Post data.
     Http.post('startLoan', wrapper, () => {
         var loan = {};
@@ -18,7 +18,7 @@ LoanDAO.prototype.endLoan = (item, person, callback, fallback) => {
     var wrapper = {};
     wrapper.item = item;
     wrapper.person = person;
-    wrapper.date = new Date();
+    wrapper.end_date = new Date();
     Http.post('endLoan', wrapper, callback, fallback);
 };
 LoanDAO.prototype.getByItem = (item,callback,fallback) => {
