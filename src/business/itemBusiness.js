@@ -3,9 +3,9 @@ var ItemBusiness = (function () {
 
     /**
         @method isAvailable
-        @description Verify if a item is currently allocated to a person.
+        @description Verify if a item is not currently allocated to a person.
         @param {Item} item Item.
-        @return {Boolean} true, if it's currently allocated.
+        @return {Boolean} true, if it's not currently allocated.
     */
 
     self.isAvailable = function (item) {
