@@ -13,7 +13,7 @@
 				</div>
 			</div>
 			<collection-filters @filterchange="onFilterChanged" :types="types"></collection-filters>
-			<collection :items="items"></collection>
+			<collection @refreshfilter="refreshFilter" :items="items"></collection>
 			<marketing></marketing>
 			<div class="footer">
 				<p>Developed by Antonio C. Schönmann Alves</p>
@@ -42,7 +42,16 @@ import CollectionFilters from './components/CollectionFilters'
 import Marketing from './components/Marketing'
 
 export default {
-	'components': { Collection, AddItemModal, ShowItemModal, AddPlaceModal, AddPersonModal, LoanItemModal, CollectionFilters, Marketing },
+	'components': { 
+		Collection, 
+		AddItemModal, 
+		ShowItemModal, 
+		AddPlaceModal, 
+		AddPersonModal, 
+		LoanItemModal, 
+		CollectionFilters, 
+		Marketing 
+	},
 	'data': function(){
 		return {
 			types: [],
@@ -53,6 +62,14 @@ export default {
 		}	
 	},
 	'methods': {
+
+		/**
+			@method populateItemsLoans
+			@description Iterate aynchronously through the item list, making AJAX calls
+						 to the Web API in order to populate all it's loans info.
+			@param {Array} itemList Item list.
+		*/
+
 		populateItemsLoans: function(itemList, callback, fallback) {
 			itemList.asyncEach((item,next,stop)=>{
 				new LoanDAO().getByItem(item, (loans)=>{
@@ -60,12 +77,15 @@ export default {
 				}, fallback);
 			}, callback);
 		},
+		
 		/**
 			@method getDatePackage
 			@description Get relevant data from Web API through AJAX calls.
 			@param {Function} callback success procedure.
 			@param {Function} fallback failure procedure.
+			@return {Object} Wrapper with all relevant data.
 		*/
+
 		getDataPackage: function(callback,fallback) {
 			new InfoDAO().getAllTypes((types)=>{
 				new PlaceDAO().getAll((places)=>{
@@ -84,42 +104,61 @@ export default {
 				},fallback);
 			},fallback);
 		},
+		
 		/**
-			@method getDatePackage
-			@description Get relevant data from Web API through AJAX calls.
+			@method doAjax
+			@description Bind requested data to Vue properties, and create a DataPackage reference to this data.
 		*/
+
 		doAjax: function(){
 			this.getDataPackage((dto)=>{
-				this.types.replace(dto.types); 
-				this.places.replace(dto.places);
-				this.people.replace(dto.people); 
-				this.items.replace(dto.items);
+				this.types = dto.types; 
+				this.places = dto.places;
+				this.people = dto.people; 
+				this.items = dto.items;
 				window.DataPackage = dto;
-			}, this.onAjaxFailure);
+			}, (x,s,e)=>{
+				alert("Error: " + s);
+			});
 		},
+
+		/**
+			@method onFilterChanged
+			@description Method called after 'filterChanged' event get's fired.
+						 Filter and sort the items based on UI filtering options.
+			@param {Object} filters Wraps filtering options into an object.
+		*/
+		
 		onFilterChanged: function(filters){
 			this.lastFilter = filters;
 			this.items.each((i)=>{
 				var matchesType = filters.type === -1 || i.type === filters.type;
-				var matchesLoanStatus = filters.is_loaned === -1 || (filters.is_loaned == (i.loans.any() && !i.loans.last().ended));
-				var matchesSearch = i.name.includes(filters.query) || i.description.includes(filters.query);
+				var matchesLoanStatus = (filters.is_loaned == !ItemBusiness.isAvailable(i));
+					matchesLoanStatus = matchesLoanStatus || filters.is_loaned === -1;
+				var matchesSearch = i.name.toLowerCase().includes(filters.query.toLowerCase());
+				matchesSearch = matchesSearch || i.description.toLowerCase().includes(filters.query.toLowerCase());
 				if(!(matchesType && matchesLoanStatus && matchesSearch)) i.hide = true;
 				else delete i.hide;
 			});
-			this.items.sort((a,b)=>{return a[filters.field] < b[filters.field]});
+			this.items.sort((a,b)=>{return a[filters.field] > b[filters.field]});
 			this.items.refresh();
 		},
+
+		/**
+			@method refreshFilter
+			@description Refresh item list to filter newly added objects.
+						 Filter and sort the items based on UI filtering options.
+		*/
+		
 		refreshFilter: function() {
+			console.log("Refresh filter!");
 			this.onFilterChanged(CollectionFilter.filter);
-		},
-		//Behavior on failure to get data package.
-		onAjaxFailure: function(x,s,e) {
-			alert("Error: " + s);
 		}
 	},
 	created() {
 		this.doAjax();
 		this.$on('filterChanged', this.onFilterChanged);
+		this.$on('refreshFilter', this.refreshFilter);
 	},
 	mounted() {
 		window.App = this;
@@ -252,8 +291,8 @@ body {
 .search-form .form-group input.form-control:-ms-input-placeholder {
   display: none;
 }
-.search-form .form-group:hover,
-.search-form .form-group.hover {
+.search-form .form-group,
+.search-form .form-group {
   width: 100%;
   border-radius: 4px 25px 25px 4px;
 }

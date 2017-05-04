@@ -28,13 +28,17 @@ window.Place = require('./model/place.js')
 window.Loan = require('./model/loan.js')
 window.ModelWrapper = require('./model/modelwrapper.js')
 
-// ======================== DAO ======================
+// ======================== DAO ========================
 
 window.ItemDAO = require('./dao/itemDAO.js')
 window.PersonDAO = require('./dao/personDAO.js')
 window.PlaceDAO = require('./dao/placeDAO.js')
 window.LoanDAO = require('./dao/loanDAO.js')
 window.InfoDAO = require('./dao/infoDAO.js')
+
+// ====================== Business =====================
+
+window.ItemBusiness = require('./business/itemBusiness.js')
 
 Vue.use(VueResource)
 Vue.use(VueTranslate)

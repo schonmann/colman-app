@@ -25,7 +25,7 @@
                 </select>
             </div>
             <div class="col-lg-3">
-                <form id="sf" class="search-form">
+                <form class="search-form" @submit="searchsubmit">
                     <div class="form-group has-feedback">
                         <label for="search" class="sr-only">Search</label>
                         <input type="text" class="form-control" v-model="filter.query" @change="onfilterchanged" name="search" id="search" placeholder="search">
@@ -51,11 +51,17 @@ export default {
     },
     'props': {types : {type:Array}},
     'methods': {
-        //Whenenever filter changes are detected, this method will be called, 
-        //and a filter change event will be fired so that the parent 
-        //component can handle it.
+        /**
+			@method onfilterchanged
+			@description Whenenever filter changes are detected, this method will be called,
+                         and a filter change event will be fired so that the parent component 
+                         can handle it.
+		*/
         onfilterchanged: function(){
             this.$emit('filterchange', this.filter);
+        },
+        searchsubmit: function(s){
+            s.preventDefault()
         },
     },
     mounted() {
@@ -74,6 +80,7 @@ export default {
         this.filter.field = this.fields.NAME
         this.filter.query = "";
         this.filter.type = -1;
+        //Store reference.
         window.CollectionFilter = this;
     },
 }

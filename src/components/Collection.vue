@@ -31,8 +31,8 @@ export default {
 			modalAddItem.show((item)=>{
 				Http.post('insertItem', item, (ok)=>{
 					this.items.push(item);
-					DataPackage.items.push(item);
-					App.refreshFilter();
+					/* Emit refresh filter event to parent vue instance. */
+					this.$emit('refreshfilter');
 				}, (x,s,e)=>{
 					alert("Error: " + s);
 				});
@@ -77,26 +77,39 @@ export default {
 				Http.post('startLoan', data, (ok)=>{
 					var loan = {item_id:item.id,person_id:person.id,start_date:now};
 					DataPackage.items.first(i=>i.id === item.id).loans.push(loan);
-					App.refreshFilter();
+					/* Emit refresh filter event to parent vue instance. */
+					this.$emit('refreshfilter');
 				}, (x,s,e)=>{
 					alert("Error: " + s);
 				});
 			});
 		},
+
+		/**
+			@method prepareGrayAreaClickListeners
+			@description When user hit the gray area, the interface will
+						 pop-up a item add modal. This setups click listener by class
+		*/
+
 		endItemLoan: function(item) {
-			var now = new Date();
 			var last = item.loans.last();
 			var person = DataPackage.people.first(p=>p.id === last.person_id);
-			Http.post('endLoan', { item: item, person: person, end_date: now},(ok)=>{
-				last.ended = true; last.end_date = now;
-				App.refreshFilter();
+			new LoanDAO().endLoan(item, person,()=>{
+				last.ended = true; 
+				last.end_date = new Date();
+				/* Emit refresh filter event to parent vue instance. */
+				this.$emit('refreshfilter');
 			}, (x,s,e)=>{
 				alert("Error: " + s);
 			});
 		},
-		/*When user hit the gray area, the interface
-		will pop-up a item add modal. This setups click
-		listener by class.*/
+		
+		/**
+			@method prepareGrayAreaClickListeners
+			@description When user hit the gray area, the interface will
+						 pop-up a item add modal. This setups click listener by class
+		*/
+
 		prepareGrayAreaClickListeners: function () {
 			var triggerClass = 'jumbotron'; var me = this;
 			$('.' + triggerClass).click(function (e) {

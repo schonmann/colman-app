@@ -68,7 +68,7 @@ export default {
             this.item = new Item();
         },
         hide: function(){ this.s = false;},
-        add: function() { 
+        add: function() {
             this.callback(this.item);
             this.hide();
         }
