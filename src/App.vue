@@ -65,7 +65,7 @@ export default {
 
 		/**
 			@method populateItemsLoans
-			@description Iterate aynchronously through the item list, making AJAX calls
+			@description Iterate asynchronously through the item list, making AJAX calls
 						 to the Web API in order to populate all it's loans info.
 			@param {Array} itemList Item list.
 		*/
@@ -107,7 +107,7 @@ export default {
 		
 		/**
 			@method doAjax
-			@description Bind requested data to Vue properties, and create a DataPackage reference to this data.
+			@description Bind requested data to Vue instance data, and create a DataPackage reference to this data.
 		*/
 
 		doAjax: function(){
