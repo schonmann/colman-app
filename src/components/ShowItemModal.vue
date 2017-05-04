@@ -126,7 +126,7 @@ export default {
             this.hide();
         },
         currentlyLoaned: function() {
-            return this.item.loans.any() && !this.item.loans.last().ended;
+            return !ItemBusiness.isAvailable(this.item);
         },
     },
     mounted() {
