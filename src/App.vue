@@ -53,55 +53,41 @@ export default {
 		}	
 	},
 	'methods': {
-		orderBy: function(e) {
-			var field = e.srcElement.value;
-			this.items.sort((a,b) => a[field] > b[field]);
-		},
-		getTypeList: function (callback,fallback) {
-			Http.get("getTypes", null, (types) => {
-				callback(types);
-			}, fallback);
-		},
-		getPlaceList: function (callback,fallback) {
-			Http.get("getPlaces", null, (places) => {
-				callback(places);
-			}, fallback);
-		},
-		getPersonList: function(callback, fallback) {
-			Http.get("getPeople", null, (people) => {
-				callback(people);
-			},fallback);
-		},
-		getItemList: function (callback,fallback) {
-			Http.get('getAllItems', null, (items)=>{
-				callback(items);
-			}, fallback);
-		},
 		populateItemsLoans: function(itemList, callback, fallback) {
 			itemList.asyncEach((item,next,stop)=>{
-				Http.get("getLoansByItem",item.id,(loans)=>{
+				new LoanDAO().getByItem(item, (loans)=>{
 					item.loans = loans; next();
 				}, fallback);
 			}, callback);
 		},
+		/**
+			@method getDatePackage
+			@description Get relevant data from Web API through AJAX calls.
+			@param {Function} callback success procedure.
+			@param {Function} fallback failure procedure.
+		*/
 		getDataPackage: function(callback,fallback) {
-			this.getTypeList((types)=>{
-				this.getPlaceList((places)=>{
-					this.getPersonList((people)=>{
-						this.getItemList((items)=>{
-							this.populateItemsLoans(items,()=>{
-								var dto = {};
-								dto.types = types;
-								dto.places = places;
-								dto.people = people;
-								dto.items = items;
-								callback(dto);
-							}, fallback);
-						}, fallback);
+			new InfoDAO().getAllTypes((types)=>{
+				new PlaceDAO().getAll((places)=>{
+					new PersonDAO().getAll((people)=>{
+						new ItemDAO().getAll((items)=>{
+							this.populateItemsLoans((items),()=>{
+								var wrapper = {};
+								wrapper.types = types;
+								wrapper.places = places;
+								wrapper.people = people;
+								wrapper.items = items;
+								callback(wrapper);
+							},fallback);
+						},fallback);
 					},fallback);
-				}, fallback);
+				},fallback);
 			},fallback);
 		},
+		/**
+			@method getDatePackage
+			@description Get relevant data from Web API through AJAX calls.
+		*/
 		doAjax: function(){
 			this.getDataPackage((dto)=>{
 				this.types.replace(dto.types); 
@@ -113,15 +99,14 @@ export default {
 		},
 		onFilterChanged: function(filters){
 			this.lastFilter = filters;
-			this.items.sort((a,b)=>{return a[filters.field] > b[filters.field]});
 			this.items.each((i)=>{
-				var hasCurrentLoan
 				var matchesType = filters.type === -1 || i.type === filters.type;
 				var matchesLoanStatus = filters.is_loaned === -1 || (filters.is_loaned == (i.loans.any() && !i.loans.last().ended));
 				var matchesSearch = i.name.includes(filters.query) || i.description.includes(filters.query);
 				if(!(matchesType && matchesLoanStatus && matchesSearch)) i.hide = true;
 				else delete i.hide;
 			});
+			this.items.sort((a,b)=>{return a[filters.field] < b[filters.field]});
 			this.items.refresh();
 		},
 		refreshFilter: function() {

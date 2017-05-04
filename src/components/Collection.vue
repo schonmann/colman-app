@@ -1,6 +1,6 @@
 <template>
   <div id="collection">
-    <div class="jumbotron light-primary-color ">
+    <div class="jumbotron light-primary-color">
       <label v-if="items.empty()" v-translate>EMPTY_COLLECTION</label>
 			<span v-else-if="items.empty(i=>!i.hide)" v-translate>NO_MATCH_FILTERS</span>
 			<div v-else>
@@ -18,7 +18,7 @@ export default {
 	components: { Item },
 	name: 'collection',
 	props: {
-		items: {type: Array},
+		items: { type: Array },
 	},
 	watch: {
 		items: {
@@ -110,6 +110,7 @@ export default {
 		window.Collection = this;
 	}
 }
+
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="sass" scoped>

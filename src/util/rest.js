@@ -5,10 +5,10 @@ var port = "58438";
 var rest = {
     'getAllItems': 'api/item/all',
     'insertItem': 'api/item/insert',
-    'getTypes': 'api/info/types/all',
-    'getPlaces': 'api/place/all',
+    'getAllTypes': 'api/info/types/all',
+    'getAllPlaces': 'api/place/all',
     'deleteItem': 'api/item/delete',
-    'getPeople': 'api/person/all',
+    'getAllPerson': 'api/person/all',
     'startLoan': 'api/loan/start',
     'endLoan': 'api/loan/end',
     'getLoansByItem': 'api/loan/byItem',
