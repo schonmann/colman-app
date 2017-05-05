@@ -3,7 +3,8 @@
     <div class="item card">
       <label class="item-label">{{me.name}}</label>
       <div class="divider"></div>
-      <img src="../assets/no-image-icon-6.png" class="item-image"></img>
+      <img v-if="me.img" :src="me.img" class="item-image"></img>
+      <img v-else src="../assets/no-image-icon-6.png" class="item-image"></img>
     </div>
   </div>
 </template>
@@ -53,11 +54,15 @@
     }
 }
 .item-image{
+    border-radius: 20px;
+    padding-top:10px;
+    padding-bottom:10px;
+    padding-left:10px;
+    padding-right:10px;
     max-width:100%;
-    height:auto;
+    height:155px;
     max-height:100%;
     width:100%;
-    object-fit:contain;
 }
 .item-label{
     width:150px;

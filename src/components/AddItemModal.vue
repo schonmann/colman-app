@@ -32,6 +32,14 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label v-translate>IMG_URL</label>
+                            <input type="text" class="form-control" v-model="item.img">
+                        </div>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label v-translate>DESCRIPTION</label>
                     <textarea class="form-control" v-model="item.description"></textarea>

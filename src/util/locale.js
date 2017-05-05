@@ -36,7 +36,8 @@ module.exports = {
         'EMAIL': "Email",
         'START_LOAN':"Start Loan",
         'END_LOAN': "End Loan",
-        'NO_MATCH_FILTERS': "No matches for that filter."
+        'NO_MATCH_FILTERS': "No matches for that filter.",
+        'IMG_URL': "Image URL",
     },
     'pt': {
         'APP_TITLE': "Gerenciador de Coleção",
@@ -75,6 +76,7 @@ module.exports = {
         'EMAIL': "Email",
         'START_LOAN':"Iniciar Empréstimo",
         'END_LOAN': "Finalizar Empréstimo",
-        'NO_MATCH_FILTERS': "Sem resultados para este filtro."
+        'NO_MATCH_FILTERS': "Sem resultados para este filtro.",
+        'IMG_URL': "URL da Imagem",
     },
 };
