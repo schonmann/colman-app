@@ -12,7 +12,7 @@
                             <input type="text" class="form-control" v-model="item.name">
                         </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-4" v-if="!editing">
                         <div class="form-group">
                             <label v-translate>TYPE</label>
                             <select class="form-control" v-model="item.type">
@@ -68,12 +68,13 @@ export default {
         }
     },
     'methods': {
-        show: function(callback, item){ 
+        show: function(callback, itemToEdit){ 
             this.s = true; 
             this.callback = callback; //Callback function to return fresh new item.
             this.types = DataPackage.types;
             this.places = DataPackage.places;
-            this.item = item ? item : new Item();
+            this.editing = typeof(itemToEdit) !== 'undefined';
+            this.item = this.editing ? itemToEdit : new Item();
         },
         hide: function(){ this.s = false;},
         add: function() {
