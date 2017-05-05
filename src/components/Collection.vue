@@ -63,7 +63,7 @@ export default {
 
 		addPerson: function(){
 			modalAddPerson.show((person)=>{
-				new PersonDAO.insert(person, ()=>{
+				new PersonDAO().insert(person, ()=>{
 					DataPackage.people.push(person);
 				}, this.onAjaxError);
 			});
