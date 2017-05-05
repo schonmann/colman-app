@@ -132,14 +132,28 @@ export default {
 		onFilterChanged: function(filters){
 			this.lastFilter = filters;
 			this.items.each((i)=>{
+				//Type is set to 'All' or matches the current item type.
 				var matchesType = filters.type === -1 || i.type === filters.type;
+				//Filter matches the item loans status.
 				var matchesLoanStatus = (filters.is_loaned == !ItemBusiness.isAvailable(i));
-					matchesLoanStatus = matchesLoanStatus || filters.is_loaned === -1;
+				//'All' status selected.
+				matchesLoanStatus = matchesLoanStatus || filters.is_loaned === -1;
+				//Search matches item name.
 				var matchesSearch = i.name.toLowerCase().includes(filters.query.toLowerCase());
+				//Search matches item description.
 				matchesSearch = matchesSearch || i.description.toLowerCase().includes(filters.query.toLowerCase());
+				//Search matches person attributes, if it is currently being carried by someone.
+				var carrier = ItemBusiness.getCurrentCarrier(i, DataPackage.people);
+				if(carrier && filters.query.length > 0){
+					matchesSearch = matchesSearch || carrier.name.toLowerCase().includes(filters.query.toLowerCase());
+					matchesSearch = matchesSearch || carrier.phone.toLowerCase().includes(filters.query.toLowerCase());
+					matchesSearch = matchesSearch || carrier.email.toLowerCase().includes(filters.query.toLowerCase());
+				}
+				//Flag to show or hide item based on all the previous matches.
 				if(!(matchesType && matchesLoanStatus && matchesSearch)) i.hide = true;
 				else delete i.hide;
 			});
+			//Sort items based on chosen field.
 			this.items.sort((a,b)=>{return a[filters.field] > b[filters.field]});
 			this.items.refresh();
 		},

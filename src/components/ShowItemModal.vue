@@ -68,6 +68,7 @@
                 <button v-if="currentlyLoaned()" style="float:left" class="btn btn-success" @click="endloan"><span v-translate>END_LOAN</span></button>
                 <button v-else style="float:left" class="btn btn-success" @click="loan"><span v-translate>LOAN_ITEM</span></button>
                 <button class="btn btn-danger" @click="del"><span v-translate>DELETE</span></button>
+                <button class="btn btn-warning" @click="edit"><span v-translate>EDIT</span></button>
                 <button class="btn light-primary-color" @click="hide"><span v-translate>CLOSE</span></button>
             </div>
         </modal>
@@ -93,8 +94,9 @@ export default {
         }
     },
     'methods': {
-        show: function(item, ondel, onloan, onendloan){
+        show: function(item, ondel, onedit, onloan, onendloan){
             this.ondel = ondel;
+            this.onedit = onedit;
             this.onloan = onloan;
             this.onendloan = onendloan;
             this.item = item;
@@ -123,6 +125,10 @@ export default {
         },
         endloan: function() {
             this.onendloan(this.item);
+            this.hide();
+        },
+        edit: function() {
+            this.onedit(this.item);
             this.hide();
         },
         currentlyLoaned: function() {

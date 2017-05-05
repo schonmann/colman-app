@@ -6,6 +6,9 @@ ItemDAO.prototype.getAll = (callback, fallback) => {
 ItemDAO.prototype.insert = (item, callback, fallback) => {
     Http.post("insertItem", item, callback, fallback);
 };
+ItemDAO.prototype.update = (item, callback, fallback) => {
+    Http.post("updateItem", item, callback, fallback);
+};
 ItemDAO.prototype.delete = (item, callback, fallback) => {
     Http.post("deleteItem", item, callback, fallback);
 };

@@ -78,6 +78,7 @@ export default {
 		showItem: function (item) {
 			modalShowItem.show(item,
 				this.deleteItem,
+				this.editItem,
 				this.startItemLoan,
 				this.endItemLoan);
 		},
@@ -127,7 +128,21 @@ export default {
 				this.$emit('refreshfilter');
 			}, this.onAjaxError);
 		},
+
+		/**
+			@method editItem
+			@description Callback function when user click's the edit item button (item info modal).
+			@param {Object} item Target item.
+		*/
 		
+		editItem: function(item) {
+			modalAddItem.show((editedItem)=>{
+				new ItemDAO().update(editedItem, ()=>{
+					this.$emit('refreshfilter');
+				}, this.onAjaxError);
+			}, item);
+		},
+
 		/**
 			@method prepareGrayAreaClickListeners
 			@description When user hit the gray area, the interface will

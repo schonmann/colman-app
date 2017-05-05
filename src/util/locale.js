@@ -38,6 +38,8 @@ module.exports = {
         'END_LOAN': "End Loan",
         'NO_MATCH_FILTERS': "No matches for that filter.",
         'IMG_URL': "Image URL",
+        'EDIT': "Edit",
+        'OK': "Ok"
     },
     'pt': {
         'APP_TITLE': "Gerenciador de Coleção",
@@ -78,5 +80,7 @@ module.exports = {
         'END_LOAN': "Finalizar Empréstimo",
         'NO_MATCH_FILTERS': "Sem resultados para este filtro.",
         'IMG_URL': "URL da Imagem",
+        'EDIT': "Editar",
+        'OK': "Ok"
     },
 };

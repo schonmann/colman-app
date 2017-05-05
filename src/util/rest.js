@@ -15,6 +15,7 @@ var rest = {
     'insertPlace': 'api/place/insert',
     'insertPerson': 'api/person/insert',
     'getByFilter': 'api/item/getByFilter',
+    'updateItem': 'api/item/update'
 };
 Rest.url = function(service,params){
     return protocol + "://" + ip + ":" + port + "/" + rest[service] + (params ? "/" + params : "");

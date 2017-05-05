@@ -47,7 +47,7 @@
             </div>
             </label>
             <div slot="footer">
-                <button class="btn btn-success" @click="add"><span v-translate>ADD</span></button>
+                <button class="btn btn-success" @click="add"><span v-translate>OK</span></button>
                 <button class="btn light-primary-color" @click="hide"><span v-translate>CLOSE</span></button>
             </div>
         </modal>
@@ -68,12 +68,12 @@ export default {
         }
     },
     'methods': {
-        show: function(callback){ 
+        show: function(callback, item){ 
             this.s = true; 
             this.callback = callback; //Callback function to return fresh new item.
             this.types = DataPackage.types;
             this.places = DataPackage.places;
-            this.item = new Item();
+            this.item = item ? item : new Item();
         },
         hide: function(){ this.s = false;},
         add: function() {

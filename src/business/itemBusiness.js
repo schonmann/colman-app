@@ -12,6 +12,18 @@ var ItemBusiness = (function () {
         return item.loans.empty() || item.loans.last().ended;
     };
 
+    /**
+        @method getCurrentCarrier
+        @description Get the current carrier of the item.
+        @param {Item} item Target item.
+        @param {Array} people Person list.
+        @return {Person} returns the current carrier of the item, or null if it's not allocated to any person in the person's list.
+    */
+    
+    self.getCurrentCarrier = function(item, people) {
+        return self.isAvailable(item) ? null : people.first(p=>p.id === item.loans.last().person_id);
+    };
+
     return self;
 })();
 module.exports = ItemBusiness;
