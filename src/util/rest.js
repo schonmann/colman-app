@@ -19,5 +19,4 @@ var rest = {
 Rest.url = function(service,params){
     return protocol + "://" + ip + ":" + port + "/" + rest[service] + (params ? "/" + params : "");
 };
-
 module.exports = Rest;
